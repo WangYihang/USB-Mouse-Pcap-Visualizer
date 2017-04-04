@@ -47,9 +47,9 @@ def main():
     # get argv
     pcapFilePath = sys.argv[1]
     outputImagePath = sys.argv[2]
-    type = sys.argv[3]
-    if type != "LEFT" and type != "RIGHT" and type != "MOVE":
-        type = "ALL"
+    action = sys.argv[3]
+    if action != "LEFT" and action != "RIGHT" and action != "MOVE":
+        action = "ALL"
 
     Io = Image.new("L", (screenWidth * INCASEOVERFLOW,
                          screenHeight * INCASEOVERFLOW), 0)  # in case of overflow
@@ -66,53 +66,33 @@ def main():
     # handle move
     for i in data:
         Bytes = i.split(":")
+        offsetX = int(Bytes[2], 16)
+        offsetY = int(Bytes[4], 16)
+        if offsetX > 0x7F:
+            offsetX -= 0xFF
+        if offsetY > 0x7F:
+            offsetY -= 0xFF
+        mousePositionX += offsetX
+        mousePositionY += offsetY
         if Bytes[0] == "01":
             # print "[+] Left butten."
-            offsetX = int(Bytes[2], 16)
-            offsetY = int(Bytes[4], 16)
-            if offsetX > 0x7F:
-                offsetX -= 0xFF
-            if offsetY > 0x7F:
-                offsetY -= 0xFF
-            mousePositionX += offsetX
-            mousePositionY += offsetY
-            # print "[+] (%d, %d)" % (mousePositionX, mousePositionY)
-            if type == "LEFT":
+            if action == "LEFT":
                 # draw point to the image panel
                 putBitPixel(Io, mousePositionX, mousePositionY, 255)
         elif Bytes[0] == "02":
             # print "[+] Right Butten."
-            offsetX = int(Bytes[2], 16)
-            offsetY = int(Bytes[4], 16)
-            if offsetX > 0x7F:
-                offsetX -= 0xFF
-            if offsetY > 0x7F:
-                offsetY -= 0xFF
-            mousePositionX += offsetX
-            mousePositionY += offsetY
-            # print "[+] (%d, %d)" % (mousePositionX, mousePositionY)
-            if type == "RIGHT":
+            if action == "RIGHT":
                 # draw point to the image panel
                 putBitPixel(Io, mousePositionX, mousePositionY, 255)
         elif Bytes[0] == "00":
             # print "[+] Move."
-            offsetX = int(Bytes[2], 16)
-            offsetY = int(Bytes[4], 16)
-            if offsetX > 0x7F:
-                offsetX -= 0xFF
-            if offsetY > 0x7F:
-                offsetY -= 0xFF
-            mousePositionX += offsetX
-            mousePositionY += offsetY
-            # print "[+] (%d, %d)" % (mousePositionX, mousePositionY)
-            # draw point to the image panel
-            if type == "MOVE":
+            if action == "MOVE":
+                # draw point to the image panel
                 putBitPixel(Io, mousePositionX, mousePositionY, 255)
-            # print "[+] Moving."
         else:
             # print "[-] Known operate."
             pass
-        if type == "ALL":
+        if action == "ALL":
             # draw point to the image panel
             putBitPixel(Io, mousePositionX, mousePositionY, 255)
     # show image

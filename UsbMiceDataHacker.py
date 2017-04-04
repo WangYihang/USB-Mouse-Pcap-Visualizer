@@ -2,6 +2,7 @@
 
 import sys
 import os
+from PIL import Image
 
 DataFileName = "usb.dat"
 data = []
@@ -11,6 +12,7 @@ screenHeight = 800
 
 mousePositionX = screenWidth / 2
 mousePositionY = screenHeight / 2
+
 
 def main():
     global mousePositionX
@@ -32,6 +34,8 @@ def main():
     pcapFilePath = sys.argv[1]
     outputImagePath = sys.argv[2]
     
+    Io = Image.new("L", (screenWidth * 2, screenHeight * 2), 0) # in case of overflow
+
     # get data of pcap
     os.system("tshark -r %s -T fields -e usb.capdata > %s" % (pcapFilePath, DataFileName))
 
@@ -61,14 +65,10 @@ def main():
 	mousePositionX += offsetX
 	mousePositionY += offsetY
 	print "[+] (%d, %d)" % (mousePositionX, mousePositionY)
-
-    # handle click
-
-    # handle left drag
-
-    # handle right drag
-   
-    # TODO handle scolling 
+	# draw point to the image panel
+	Io.putpixel((mousePositionX, mousePositionY,),255)
+    # show image
+    Io.show()
 
 if __name__ == "__main__":
     main()

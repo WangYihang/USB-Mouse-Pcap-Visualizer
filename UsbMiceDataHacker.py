@@ -6,7 +6,15 @@ import os
 DataFileName = "usb.dat"
 data = []
 
+screenWidth = 1024
+screenHeight = 800
+
+mousePositionX = screenWidth / 2
+mousePositionY = screenHeight / 2
+
 def main():
+    global mousePositionX
+    global mousePositionY
     # check argv
     if len(sys.argv) != 3:
         print "Usage : "
@@ -32,9 +40,27 @@ def main():
         for line in f:
             data.append(line[0:-1])
     
-    print data
 
     # handle move
+    for i in data:
+	Bytes = i.split(":")
+	if Bytes[0] == "01":
+	    print "[+] Left butten."
+	elif Bytes[0] == "02":
+	    print "[+] Right Butten." 
+	elif Bytes[0] == "00":
+	    print "[+] Moving."
+	else:
+	    print "[-] Known operate."
+	offsetX = int(Bytes[2], 16)
+	offsetY = int(Bytes[4], 16)
+        if offsetX > 0x7F:
+	    offsetX -= 0xFF
+        if offsetY > 0x7F:
+	   offsetY -= 0xFF
+	mousePositionX += offsetX
+	mousePositionY += offsetY
+	print "[+] (%d, %d)" % (mousePositionX, mousePositionY)
 
     # handle click
 

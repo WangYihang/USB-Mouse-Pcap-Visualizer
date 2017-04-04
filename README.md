@@ -6,11 +6,12 @@ Usage :
 Tips : 
         To use this python script , you must install the tshark first.
         You can use `sudo apt-get install tshark` to install it
+        And the pillow lib is also required
+        You can install it by typing `sudo pip install pillow`
 Author : 
         WangYihang <wangyihanger@gmail.com>
         If you have any questions , please contact me by email.
         Thank you for using.
-
 ```
 
 Demo : 
@@ -18,26 +19,11 @@ Demo :
 ```
 1. Step1 , Get data
 
-sun@ubuntu:~/UsbKeyboardDataHacker$ tshark -r ./example.pcap -T fields -e usb.capdata
-00:00:09:00:00:00:00:00
-00:00:00:00:00:00:00:00
-00:00:0f:00:00:00:00:00
-00:00:00:00:00:00:00:00
-00:00:04:00:00:00:00:00
-00:00:00:00:00:00:00:00
-00:00:0a:00:00:00:00:00
-00:00:00:00:00:00:00:00
-20:00:00:00:00:00:00:00
-20:00:2f:00:00:00:00:00
-...
-
 
 2. Step2 , decode
 
-sun@ubuntu:~/UsbKeyboardDataHacker$ python UsbKeyboardDataHacker.py ./example.pcap 
-[-] Unknow Key : 01
-[-] Unknow Key : 01
-[+] Found : flag{pr355_0nwards_a2fee6e0}
+
+3. Step3 , show the image file
 
 ```
 

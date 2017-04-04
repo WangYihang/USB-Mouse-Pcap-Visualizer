@@ -15,6 +15,18 @@ mousePositionY = screenHeight / 2
 
 INCASEOVERFLOW = 5
 
+def putBitPixel(img, x, y, color):
+    img.putpixel((x - 1, y - 1),color)
+    img.putpixel((x - 1, y),color)
+    img.putpixel((x - 1, y + 1),color)
+    img.putpixel((x, y - 1),color)
+    img.putpixel((x, y),color)
+    img.putpixel((x, y + 1),color)
+    img.putpixel((x + 1, y - 1),color)
+    img.putpixel((x + 1, y),color)
+    img.putpixel((x + 1, y + 1),color)
+	
+
 def main():
     global mousePositionX
     global mousePositionY
@@ -65,7 +77,7 @@ def main():
 	    # print "[+] (%d, %d)" % (mousePositionX, mousePositionY)
 	    if type == "LEFT":
 		# draw point to the image panel
-		Io.putpixel((mousePositionX, mousePositionY,),255)
+		putBitPixel(Io, mousePositionX, mousePositionY, 255)
 	elif Bytes[0] == "02":
 	    # print "[+] Right Butten." 
 	    offsetX = int(Bytes[2], 16)
@@ -79,7 +91,7 @@ def main():
 	    # print "[+] (%d, %d)" % (mousePositionX, mousePositionY)
 	    if type == "RIGHT":
 		# draw point to the image panel
-		Io.putpixel((mousePositionX, mousePositionY,),255)
+		putBitPixel(Io, mousePositionX, mousePositionY, 255)
 	elif Bytes[0] == "00":
 	    # print "[+] Move." 
 	    offsetX = int(Bytes[2], 16)
@@ -93,14 +105,14 @@ def main():
 	    # print "[+] (%d, %d)" % (mousePositionX, mousePositionY)
 	    # draw point to the image panel
 	    if type == "MOVE":
-		Io.putpixel((mousePositionX, mousePositionY,),255)
+		putBitPixel(Io, mousePositionX, mousePositionY, 255)
 	    # print "[+] Moving."
 	else:
 	    # print "[-] Known operate."
 	    pass
 	if type == "ALL":
 	    # draw point to the image panel
-	    Io.putpixel((mousePositionX, mousePositionY,),255)
+	    putBitPixel(Io, mousePositionX, mousePositionY, 255)
     # show image
     Io.show()
     

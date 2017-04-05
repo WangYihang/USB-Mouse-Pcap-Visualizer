@@ -21,7 +21,7 @@ def main():
     # check argv
     if len(sys.argv) != 3:
         print "Usage : "
-        print "        python UsbMiceHacker.py data.pcap LEFT|RIGHT|MOVE|ALL]"
+        print "        python UsbMiceHacker.py data.pcap [LEFT|RIGHT|MOVE|ALL]"
         print "Tips : "
         print "        To use this python script , you must install the numpy,matplotlib first."
         print "        You can use `sudo pip install matplotlib numpy` to install it"
@@ -97,7 +97,7 @@ def main():
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
 
-    ax1.set_title('UsbMiceDataHacker By : WangYihang')
+    ax1.set_title('[%s]-[%s] Author : WangYihang' % (pcapFilePath, action))
     ax1.scatter(X, Y, c='r', marker='o')
     plt.show()
 

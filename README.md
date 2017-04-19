@@ -1,7 +1,8 @@
 Description : 
 ---
 ```
-A forensic tool for extracting mouse movement data from usb traffic packages, and can be drawn as a picture of a mouse
+A forensic tool for extracting mouse movement data from usb traffic packages
+and can be drawn as a picture of a mouse
 ```
 
 Usage : 

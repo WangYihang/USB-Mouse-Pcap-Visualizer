@@ -36,7 +36,7 @@ def main():
     action = sys.argv[2]
 
     if action != "LEFT" and action != "RIGHT" and action != "MOVE":
-        action = "ALL"
+        action = "LEFT"
 
     # get data of pcap
     command = "tshark -r '%s' -T fields -e usb.capdata > %s" % (

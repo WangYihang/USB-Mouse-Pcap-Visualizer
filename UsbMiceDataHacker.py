@@ -35,7 +35,7 @@ def main():
     pcapFilePath = sys.argv[1]
     action = sys.argv[2]
 
-    if action != "LEFT" and action != "RIGHT" and action != "MOVE":
+    if action != "LEFT" and action != "ALL" and action != "RIGHT" and action != "MOVE":
         action = "LEFT"
 
     # get data of pcap

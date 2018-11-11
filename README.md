@@ -24,7 +24,7 @@ Author :
 ```
 1. Step1 , Get data
 
-root@kali:~/桌面/usb/USB/UsbKeyboardDataHacker# tshark -r ./example.pcap -T fields -e usb.capdata
+root@kali:~/桌面/usb/USB/UsbKeyboardDataHacker# tshark -r ./data.pcap -T fields -e usb.capdata
 00:00:09:00:00:00:00:00
 00:00:00:00:00:00:00:00
 00:00:0f:00:00:00:00:00

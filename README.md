@@ -11,7 +11,7 @@ Usage :
 Usage : 
         python UsbMiceHacker.py data.pcap out.png [LEFT|RIGHT|MOVE|ALL]
 Tips : 
-        To use this python script , you must install the numpy,matplotlib first.
+        To use this python script , you must install the numpy,matplotlib,Wireshark first.
         You can use `sudo pip install matplotlib numpy` to install it.
 Author : 
         WangYihang <wangyihanger@gmail.com>

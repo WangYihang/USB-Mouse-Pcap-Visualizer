@@ -39,7 +39,7 @@ def main():
         action = "LEFT"
 
     # get data of pcap
-    command = "tshark -r '%s' -T fields -e usb.capdata > %s" % (
+    command = "tshark -r %s -T fields -e usb.capdata > %s" % (
         pcapFilePath, DataFileName)
     print command
     os.system(command)

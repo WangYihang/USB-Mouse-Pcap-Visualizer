@@ -20,15 +20,15 @@ def main():
     global mousePositionY
     # check argv
     if len(sys.argv) != 3:
-        print "Usage : "
-        print "        python UsbMiceHacker.py data.pcap [LEFT|RIGHT|MOVE|ALL]"
-        print "Tips : "
-        print "        To use this python script , you must install the numpy,matplotlib first."
-        print "        You can use `sudo pip install matplotlib numpy` to install it"
-        print "Author : "
-        print "        WangYihang <wangyihanger@gmail.com>"
-        print "        If you have any questions , please contact me by email."
-        print "        Thank you for using."
+        print("Usage : ")
+        print("        python UsbMiceHacker.py data.pcap [LEFT|RIGHT|MOVE|ALL]")
+        print("Tips : ")
+        print("        To use this python script , you must install the numpy,matplotlib first.")
+        print("        You can use `sudo pip install matplotlib numpy` to install it")
+        print("Author : ")
+        print("        WangYihang <wangyihanger@gmail.com>")
+        print("        If you have any questions , please contact me by email.")
+        print("        Thank you for using.")
         exit(1)
 
     # get argv
@@ -41,7 +41,7 @@ def main():
     # get data of pcap
     command = "tshark -r %s -T fields -e usb.capdata > %s" % (
         pcapFilePath, DataFileName)
-    print command
+    print(command)
     os.system(command)
 
     # read data
@@ -69,25 +69,25 @@ def main():
         mousePositionX += offsetX
         mousePositionY += offsetY
         if Bytes[0] == "01":
-            # print "[+] Left butten."
+            print("[+] Left butten.")
             if action == "LEFT":
                 # draw point to the image panel
                 X.append(mousePositionX)
                 Y.append(-mousePositionY)
         elif Bytes[0] == "02":
-            # print "[+] Right Butten."
+            print("[+] Right Butten.")
             if action == "RIGHT":
                 # draw point to the image panel
                 X.append(mousePositionX)
                 Y.append(-mousePositionY)
         elif Bytes[0] == "00":
-            # print "[+] Move."
+            print("[+] Move.")
             if action == "MOVE":
                 # draw point to the image panel
                 X.append(mousePositionX)
                 Y.append(-mousePositionY)
         else:
-            # print "[-] Known operate."
+            print("[-] Known operate.")
             pass
         if action == "ALL":
             # draw point to the image panel

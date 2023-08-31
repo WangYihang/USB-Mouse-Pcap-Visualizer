@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "usb-mouse-pcap-visualizer"
+version = "0.1.0"
+description = ""
+authors = ["Yihang Wang <wangyihanger@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+numpy = "^1.25.2"
+matplotlib = "^3.7.2"
+pyshark = "^0.6"
+isort = "^5.12.0"
+
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.12.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

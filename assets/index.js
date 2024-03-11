@@ -65,10 +65,18 @@ function initCanvas(data) {
             minY: Math.min(y, acc.minY),
             maxY: Math.max(y, acc.maxY),
         }), { minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity });
-        const scale = 1.2;
-        canvas.width = (maxX - minX) * scale;
-        canvas.height = (maxY - minY) * scale;
+
+        const screenWidth = window.innerWidth;
+        const canvasWidth = screenWidth * 0.8;
+        const originalWidth = maxX - minX;
+        const originalHeight = maxY - minY;
+        const aspectRatio = originalHeight / originalWidth;
+        canvas.width = canvasWidth;
+        canvas.height = canvasWidth * aspectRatio;
         canvasContainer.style.width = `${canvas.width}px`;
+    
+        const scaleX = canvas.width / originalWidth * 0.8;
+        const scaleY = canvas.height / originalHeight * 0.8;
 
         function updateProgressBar(currentIndex) {
             progressBar.style.width = `${(currentIndex / totalFrames) * 100}%`;
@@ -99,15 +107,16 @@ function initCanvas(data) {
             paths = paths.filter(drawPath);
             if (currentIndex < data.length) {
                 const snapshot = data[currentIndex];
-                const x = (snapshot.x - minX) * scale;
-                const y = canvas.height - (snapshot.y - minY) * scale;
+                const x = (snapshot.x - minX) * scaleX;
+                const y = canvas.height - (snapshot.y - minY) * scaleY;
+    
                 if (currentIndex > 0) {
                     customCursor.style.left = `${x - 5}px`;
                     customCursor.style.top = `${y - 5}px`;
                     updateCursor(snapshot);
                     const lastSnapshot = data[currentIndex - 1];
-                    const lastX = (lastSnapshot.x - minX) * scale;
-                    const lastY = canvas.height - (lastSnapshot.y - minY) * scale;
+                    const lastX = (lastSnapshot.x - minX) * scaleX;
+                    const lastY = canvas.height - (lastSnapshot.y - minY) * scaleY;
                     const left_button_holding = snapshot.left_button_holding;
                     const right_button_holding = snapshot.right_button_holding;
                     const color = getColor(left_button_holding, right_button_holding);

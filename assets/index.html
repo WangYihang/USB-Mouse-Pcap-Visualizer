@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Mouse Heart Drawing</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <div class="flex flex-col items-center justify-center p-4">
+        <button id="clearCanvasButton" class="bg-gray-200 px-4 py-2 rounded-full fixed bottom-0 left-0 mb-4 ml-4">
+            <i class="fa-solid fa-broom"></i>
+        </button>
+        <input type="file" id="fileInput" accept=".csv" class="my-4">
+        <div id="canvasContainer" class="relative">
+            <div id="customCursor" class="absolute"></div>
+            <canvas id="mouseCanvas" class="border-2 border-gray-300"></canvas>
+            <div id="progressContainer" class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mt-4">
+                <div id="progressBar" class="bg-blue-600 h-2.5 rounded-full"></div>
+            </div>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+
+</html>

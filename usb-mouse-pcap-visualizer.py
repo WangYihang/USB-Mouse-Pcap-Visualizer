@@ -3,16 +3,27 @@
 
 import argparse
 import struct
-from enum import Enum
-
+import sys
+import enum
 import matplotlib.pyplot as plt
 import numpy as np
 import pyshark
+import loguru
 
+from typing import List
 
-class Opcode(Enum):
+class Opcode(enum.Enum):
     LEFT_BUTTON_HOLDING = 0b00000001
     RIGHT_BUTTON_HOLDING = 0b00000010
+
+
+class MouseSnapshot:
+    def __init__(self, timestamp, x, y, left_button_holding, right_button_holding):
+        self.timestamp = timestamp
+        self.x = x
+        self.y = y
+        self.left_button_holding = left_button_holding
+        self.right_button_holding = right_button_holding
 
 
 class MouseEmulator:
@@ -23,32 +34,41 @@ class MouseEmulator:
         self.left_button_holding = False
 
     def move(self, x, y):
+        loguru.logger.debug(f"move(x={x}, y={y})")
         self.x += x
         self.y -= y
 
     def set_left_button(self, state):
+        loguru.logger.debug(f"set_left_button(state={state})")
         self.left_button_holding = state
 
     def set_right_button(self, state):
+        loguru.logger.debug(f"set_right_button(state={state})")
         self.right_button_holding = state
 
-    def snapshot(self):
-        return (self.x, self.y, self.left_button_holding, self.right_button_holding)
+    def snapshot(self, timestamp):
+        return MouseSnapshot(timestamp, self.x, self.y, self.left_button_holding, self.right_button_holding)
 
 
 class MouseTracer:
     def __init__(self):
-        self.snapshots = []
+        self.snapshots: List[MouseSnapshot] = []
 
-    def add(self, snapshot):
+    def add(self, snapshot: MouseSnapshot):
         self.snapshots.append(snapshot)
 
 
 def load_pcap(filepath):
+    loguru.logger.debug(f"load_pcap(filepath={filepath})")
     cap = pyshark.FileCapture(filepath)
     for packet in cap:
-        if hasattr(packet, 'usb') and hasattr(packet, 'DATA') and hasattr(packet.DATA, 'usb_capdata'):
-            yield packet.DATA.usb_capdata
+        if hasattr(packet, 'DATA'):
+            usbhid_data = packet.DATA.get_field("usbhid_data")
+            usb_capdata = packet.DATA.get_field("usb_capdata")
+            timestamp = packet.sniff_timestamp
+            for data in [usbhid_data, usb_capdata]: 
+                if data:
+                    yield (timestamp, data)
 
 
 def parse_packet(payload):
@@ -71,36 +91,34 @@ def parse_packet(payload):
 
 def snapshot_mouse(filepath):
     mouse_emulator = MouseEmulator()
-    for i in load_pcap(filepath):
-        mx, my, lbh, rbh = parse_packet(i)
+    for timestamp, data in load_pcap(filepath):
+        mx, my, lbh, rbh = parse_packet(data)
         mouse_emulator.move(mx, my)
         mouse_emulator.set_left_button(lbh)
         mouse_emulator.set_right_button(rbh)
-        yield mouse_emulator.snapshot()
+        yield mouse_emulator.snapshot(timestamp)
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--input-file", help="Path to the input pcap file.")
+    parser.add_argument("-i", "--input-file", help="Path to the input pcap file.", required=True)
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
     mt = MouseTracer()
-
     xs = []
     ys = []
     colors = []
     alphas = []
     for snapshot in snapshot_mouse(args.input_file):
-        x, y, lbh, rbh = snapshot
-        color = "red" if lbh else "grey"
-        color = "blue" if rbh else color
-        alpha = 1 if lbh or rbh else 0.1
         mt.add(snapshot)
-        xs.append(snapshot[0])
-        ys.append(snapshot[1])
+        color = "red" if snapshot.left_button_holding else "grey"
+        color = "blue" if snapshot.right_button_holding else color
+        alpha = 1 if snapshot.left_button_holding or snapshot.right_button_holding else 0.1
+        xs.append(snapshot.x)
+        ys.append(snapshot.y)
         colors.append(color)
         alphas.append(alpha)
 

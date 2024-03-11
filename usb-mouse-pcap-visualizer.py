@@ -5,10 +5,14 @@ import argparse
 import struct
 import sys
 import enum
-import matplotlib.pyplot as plt
 import numpy as np
 import pyshark
 import loguru
+import time
+import tqdm
+import uuid
+import json
+import csv
 
 from typing import List
 
@@ -17,7 +21,7 @@ class Opcode(enum.Enum):
     RIGHT_BUTTON_HOLDING = 0b00000010
 
 
-class MouseSnapshot:
+class MouseSnapshot():
     def __init__(self, timestamp, x, y, left_button_holding, right_button_holding):
         self.timestamp = timestamp
         self.x = x
@@ -27,6 +31,13 @@ class MouseSnapshot:
 
     def __repr__(self):
         return f"MouseSnapshot(timestamp={self.timestamp}, x={self.x}, y={self.y}, left_button_holding={self.left_button_holding}, right_button_holding={self.right_button_holding})"
+
+
+class MouseSnapshotEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, MouseSnapshot):
+            return obj.__dict__
+        return json.JSONEncoder.default(self, obj)
 
 
 class MouseEmulator:
@@ -47,9 +58,7 @@ class MouseEmulator:
         self.right_button_holding = state
 
     def snapshot(self, timestamp):
-        ms = MouseSnapshot(timestamp, self.x, self.y, self.left_button_holding, self.right_button_holding)
-        loguru.logger.debug(ms)
-        return ms
+        return MouseSnapshot(timestamp, self.x, self.y, self.left_button_holding, self.right_button_holding)
 
 
 class MouseTracer:
@@ -59,15 +68,20 @@ class MouseTracer:
     def add(self, snapshot: MouseSnapshot):
         self.snapshots.append(snapshot)
 
+    def save(self, path):
+        with open(path, "w", newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(["timestamp", "x", "y", "left_button_holding", "right_button_holding"])
+            for snapshot in self.snapshots:
+                writer.writerow([snapshot.timestamp, snapshot.x, snapshot.y, snapshot.left_button_holding, snapshot.right_button_holding])
 
 def load_pcap(filepath):
-    loguru.logger.debug(f"load_pcap(filepath={filepath})")
     cap = pyshark.FileCapture(filepath)
-    for packet in cap:
+    for packet in tqdm.tqdm(cap):
         if hasattr(packet, 'DATA'):
             usbhid_data = packet.DATA.get_field("usbhid_data")
             usb_capdata = packet.DATA.get_field("usb_capdata")
-            timestamp = packet.sniff_timestamp
+            timestamp = float(packet.sniff_timestamp)
             for data in [usbhid_data, usb_capdata]: 
                 if data:
                     yield (timestamp, data)
@@ -104,28 +118,20 @@ def snapshot_mouse(filepath):
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input-file", help="Path to the input pcap file.", required=True)
+    parser.add_argument("-o", "--output-file", help="Path to the output csv file.", required=True)
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
+    loguru.logger.info(args)
     mt = MouseTracer()
-    xs = []
-    ys = []
-    colors = []
-    alphas = []
     for snapshot in snapshot_mouse(args.input_file):
         mt.add(snapshot)
-        color = "red" if snapshot.left_button_holding else "grey"
-        color = "blue" if snapshot.right_button_holding else color
-        alpha = 1 if snapshot.left_button_holding or snapshot.right_button_holding else 0.1
-        xs.append(snapshot.x)
-        ys.append(snapshot.y)
-        colors.append(color)
-        alphas.append(alpha)
-
-    plt.scatter(xs, ys, c=colors, alpha=alphas)
-    plt.show()
+    loguru.logger.success(f"{len(mt.snapshots)} snapshots loaded")
+    mt.save(args.output_file)
+    loguru.logger.success(f"mouse snapshots saved to {args.output_file}")
+    loguru.logger.success("visualize the data by opening the assets/index.html file in your browser.")
 
 
 if __name__ == "__main__":

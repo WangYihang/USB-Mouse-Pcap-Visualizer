@@ -33,22 +33,32 @@ sudo apt install tshark
 ## Usage
 
 ```bash
-poetry run python usb-mouse-pcap-visualizer.py --help
-usage: usb-mouse-pcap-visualizer.py [-h] [-i INPUT_FILE]
+$ poetry run python usb-mouse-pcap-visualizer.py --help
+usage: usb-mouse-pcap-visualizer.py [-h] -i INPUT_FILE -o OUTPUT_FILE
 
 options:
   -h, --help            show this help message and exit
   -i INPUT_FILE, --input-file INPUT_FILE
                         Path to the input pcap file.
+  -o OUTPUT_FILE, --output-file OUTPUT_FILE
+                        Path to the output csv file.
 ```
 
 ```bash
-poetry run python usb-mouse-pcap-visualizer.py -i example/example.pcap
+poetry run python usb-mouse-pcap-visualizer.py -i example/example.pcap -o example/example.csv
 ```
 
-> The left button will be rendered as red, the right button will be rendered as blue, and mouse movement will be rendered as grey.
+The csv file can be visualized by `assets/index.html`, or try it [online](https://usb-mouse-pcap-visualizer.vercel.app/).
+
+```csv
+timestamp,x,y,left_button_holding,right_button_holding
+1478943238.284336,0,0,False,False
+1478943238.899621,0,0,False,False
+1478943238.899621,0,0,False,False
+```
 
 ![](example/example.png)
+
 
 ## Demonstration Videos
 

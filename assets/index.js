@@ -12,13 +12,13 @@ document.getElementById('fileInput').addEventListener('change', function (event)
 
 function parseCSVToObjects(csvText) {
     const lines = csvText.trim().split("\n");
-    const headers = lines[0].split(",");
+    const headers = lines[0].trim().split(",");
 
     return lines.slice(1).map(line => {
         const values = line.split(",");
         let obj = {};
         headers.forEach((header, index) => {
-            let value = values[index];
+            let value = values[index].trim();
             if (value.toLowerCase() === "true" || value.toLowerCase() === "false") {
                 value = value.toLowerCase() === "true";
             } else if (!isNaN(value) && value.trim() !== "") {
@@ -28,6 +28,18 @@ function parseCSVToObjects(csvText) {
         });
         return obj;
     });
+}
+
+function getColor(left_button_holding, right_button_holding) {
+    if (left_button_holding && right_button_holding) {
+        return { r: 255, g: 0, b: 0 };
+    } else if (left_button_holding) {
+        return { r: 0, g: 0, b: 255 };
+    } else if (right_button_holding) {
+        return { r: 0, g: 255, b: 0 };
+    } else {
+        return { r: 32, g: 32, b: 32 };
+    }
 }
 
 function initCanvas(data) {
@@ -81,14 +93,6 @@ function initCanvas(data) {
             return true;
         }
 
-        function drawPathsUpToIndex(index) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i <= index && i < data.length; i++) {
-                const snapshot = data[i];
-                drawPath(snapshot);
-            }
-        }
-
         function animate() {
             if (isPaused) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -104,10 +108,10 @@ function initCanvas(data) {
                     const lastSnapshot = data[currentIndex - 1];
                     const lastX = (lastSnapshot.x - minX) * scale;
                     const lastY = canvas.height - (lastSnapshot.y - minY) * scale;
-                    const color = snapshot.left_button_holding && snapshot.right_button_holding ? { r: 255, g: 0, b: 0 } :
-                        snapshot.left_button_holding ? { r: 0, g: 0, b: 255 } :
-                            snapshot.right_button_holding ? { r: 0, g: 255, b: 0 } : { r: 0, g: 0, b: 0 };
-                    const permanent = snapshot.left_button_holding || snapshot.right_button_holding;
+                    const left_button_holding = snapshot.left_button_holding;
+                    const right_button_holding = snapshot.right_button_holding;
+                    const color = getColor(left_button_holding, right_button_holding);
+                    const permanent = left_button_holding || right_button_holding;
                     paths.push({ startX: lastX, startY: lastY, endX: x, endY: y, color, permanent, timestamp: performance.now() });
                 }
                 currentIndex++;

@@ -3,14 +3,10 @@
 
 import argparse
 import struct
-import sys
 import enum
-import numpy as np
 import pyshark
 import loguru
-import time
 import tqdm
-import uuid
 import json
 import csv
 

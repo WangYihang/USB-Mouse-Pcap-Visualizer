@@ -8,16 +8,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
-<body>
-    <div class="flex flex-col items-center justify-center p-4">
-        <button id="clearCanvasButton" class="bg-gray-200 px-4 py-2 rounded-full fixed bottom-0 left-0 mb-4 ml-4">
-            <i class="fa-solid fa-broom"></i>
+<body class="bg-gray-100">
+    <div class="flex flex-col items-center justify-center min-h-screen p-6">
+        <p class="text-red-800 text-3xl font-bold mb-6">USB Mouse Pcap Visualizer</p>
+        <button id="clearCanvasButton" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded shadow-lg fixed bottom-10 left-10">
+            <i class="fa-solid fa-broom"></i> Clear
         </button>
-        <input type="file" id="fileInput" accept=".csv" class="my-4">
-        <div id="canvasContainer" class="relative">
+        <p class="text-lg mb-4">Upload <span class="text-blue-800 font-bold underline">the output csv file</span> <span class="text-red-800 font-semibold">(not pcap file)</span> from <a href="https://github.com/WangYihang/USB-Mouse-Pcap-Visualizer" target="_blank" class="text-blue-600 hover:text-blue-700 underline">USB Mouse Pcap Visualizer <i class="fa-brands fa-github"></i></a></p>
+        <span class="block bg-gray-200 p-3 rounded text-sm mb-4">
+            timestamp,x,y,left_button_holding,right_button_holding<br>
+            1478943238.284336,0,0,False,False<br>
+            1478943238.899621,0,0,False,False
+        </span>
+        <p class="text-gray-700 text-base">
+            Use the <i class="fas fa-arrow-left text-yellow-700"></i> and <i class="fas fa-arrow-right text-yellow-700"></i> arrow keys to navigate through the play area.
+          </p>
+          
+        <input type="file" id="fileInput" accept=".csv" class="mb-4 mt-4 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-violet-200 file:text-violet-700 hover:file:bg-violet-100 file:rounded-lg">
+        <div id="canvasContainer" class="relative my-6">
             <div id="customCursor" class="absolute"></div>
-            <canvas id="mouseCanvas" class="border-2 border-gray-300"></canvas>
-            <div id="progressContainer" class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mt-4">
+            <canvas id="mouseCanvas" class="shadow-xl"></canvas>
+            <div id="progressContainer" class="w-full bg-gray-300 rounded-full h-2.5 mt-4">
                 <div id="progressBar" class="bg-blue-600 h-2.5 rounded-full"></div>
             </div>
         </div>

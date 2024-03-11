@@ -168,6 +168,24 @@ function initCanvas(data) {
             }
         });
 
+        function handleKeyboardEvent(event) {
+            const frameStep = 64;
+            if (event.keyCode === 37) {
+                currentIndex = Math.max(currentIndex - frameStep, 0);
+            } else if (event.keyCode === 39) {
+                currentIndex = Math.min(currentIndex + frameStep, totalFrames - 1);
+            }
+            if (isPaused) {
+                updateProgressBar(currentIndex);
+            } else {
+                cancelAnimationFrame(animationId);
+                animate();
+            }
+        }
+    
+        window.addEventListener('keydown', handleKeyboardEvent);
+    
+
         animationId = window.requestAnimationFrame(animate);
     }
 }

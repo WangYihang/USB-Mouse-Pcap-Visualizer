@@ -51,6 +51,7 @@ function initCanvas(data) {
         const progressContainer = document.getElementById('progressContainer');
         const canvasContainer = document.getElementById('canvasContainer');
         canvasContainer.style.display = 'block';
+        let playbackSpeed = 1;
 
         const ctx = canvas.getContext('2d');
         let animationId = null;
@@ -101,6 +102,25 @@ function initCanvas(data) {
             return true;
         }
 
+        function formatTimestamp(timestamp) {
+            var date = new Date(timestamp);
+            var formattedDate = date.toLocaleDateString("en-US");
+            var formattedTime = date.toLocaleTimeString("en-US");
+            return formattedDate + ' ' + formattedTime;
+        }
+
+        function drawInfo(snapshot) {
+            ctx.fillStyle = 'black';
+            ctx.font = '16px Arial';
+            ctx.fillText(`Speed: x${playbackSpeed}`, 10, 20);
+            ctx.fillText(`Frame: ${currentIndex} / ${totalFrames}`, 10, 40);
+            ctx.fillText(`Time: ${formatTimestamp(snapshot.timestamp *1000)}`, 10, 60);
+            ctx.fillText(`X: ${snapshot.x}`, 10, 80);
+            ctx.fillText(`Y: ${snapshot.y}`, 10, 100);
+            ctx.fillText(`Left button: ${snapshot.left_button_holding}`, 10, 120);
+            ctx.fillText(`Right button: ${snapshot.right_button_holding}`, 10, 140);
+        }
+
         function animate() {
             if (isPaused) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -123,9 +143,14 @@ function initCanvas(data) {
                     const permanent = left_button_holding || right_button_holding;
                     paths.push({ startX: lastX, startY: lastY, endX: x, endY: y, color, permanent, timestamp: performance.now() });
                 }
-                currentIndex++;
+
+                currentIndex += playbackSpeed;
+                currentIndex = Math.min(currentIndex, data.length);
+
                 updateProgressBar(currentIndex);
-            }
+             drawInfo(snapshot);
+        }
+
             animationId = window.requestAnimationFrame(animate);
         }
 
@@ -183,6 +208,10 @@ function initCanvas(data) {
                 currentIndex = Math.max(currentIndex - frameStep, 0);
             } else if (event.keyCode === 39) {
                 currentIndex = Math.min(currentIndex + frameStep, totalFrames - 1);
+                   } else if (event.keyCode === 38) { 
+                playbackSpeed = Math.min(playbackSpeed + 1, 10); 
+            } else if (event.keyCode === 40) { 
+                playbackSpeed = Math.max(playbackSpeed - 1, 1); 
             }
             if (isPaused) {
                 updateProgressBar(currentIndex);

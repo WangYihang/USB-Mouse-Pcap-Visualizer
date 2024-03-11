@@ -25,6 +25,9 @@ class MouseSnapshot:
         self.left_button_holding = left_button_holding
         self.right_button_holding = right_button_holding
 
+    def __repr__(self):
+        return f"MouseSnapshot(timestamp={self.timestamp}, x={self.x}, y={self.y}, left_button_holding={self.left_button_holding}, right_button_holding={self.right_button_holding})"
+
 
 class MouseEmulator:
     def __init__(self):
@@ -34,20 +37,19 @@ class MouseEmulator:
         self.left_button_holding = False
 
     def move(self, x, y):
-        loguru.logger.debug(f"move(x={x}, y={y})")
         self.x += x
         self.y -= y
 
     def set_left_button(self, state):
-        loguru.logger.debug(f"set_left_button(state={state})")
         self.left_button_holding = state
 
     def set_right_button(self, state):
-        loguru.logger.debug(f"set_right_button(state={state})")
         self.right_button_holding = state
 
     def snapshot(self, timestamp):
-        return MouseSnapshot(timestamp, self.x, self.y, self.left_button_holding, self.right_button_holding)
+        ms = MouseSnapshot(timestamp, self.x, self.y, self.left_button_holding, self.right_button_holding)
+        loguru.logger.debug(ms)
+        return ms
 
 
 class MouseTracer:

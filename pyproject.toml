@@ -12,6 +12,7 @@ matplotlib = "^3.7.2"
 pyshark = "^0.6"
 isort = "^5.12.0"
 loguru = "^0.7.2"
+plotly = "^5.19.0"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -8,30 +8,75 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
-<body class="bg-gray-100">
-    <div class="flex flex-col items-center justify-center min-h-screen p-6">
-        <p class="text-red-800 text-3xl font-bold mb-6">USB Mouse Pcap Visualizer</p>
-        <button id="clearCanvasButton" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded shadow-lg fixed bottom-10 left-10">
-            <i class="fa-solid fa-broom"></i> Clear
-        </button>
-        <p class="text-lg mb-4">Upload <span class="text-blue-800 font-bold underline">the output csv file</span> <span class="text-red-800 font-semibold">(not pcap file)</span> from <a href="https://github.com/WangYihang/USB-Mouse-Pcap-Visualizer" target="_blank" class="text-blue-600 hover:text-blue-700 underline">USB Mouse Pcap Visualizer <i class="fa-brands fa-github"></i></a></p>
-        <span class="block bg-gray-200 p-3 rounded text-sm mb-4">
-            timestamp,x,y,left_button_holding,right_button_holding<br>
-            1478943238.284336,0,0,False,False<br>
-            1478943238.899621,0,0,False,False
-        </span>
-        <p class="text-gray-700 text-base">
-            Use the <i class="fas fa-arrow-left text-yellow-700"></i> and <i class="fas fa-arrow-right text-yellow-700"></i> arrow keys to navigate through the play area.
-          </p>
-          
-        <input type="file" id="fileInput" accept=".csv" class="mb-4 mt-4 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-violet-200 file:text-violet-700 hover:file:bg-violet-100 file:rounded-lg">
-        <div id="canvasContainer" class="relative my-6">
-            <div id="customCursor" class="absolute"></div>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-4 w-2/3">
+        <header class="text-center mb-8">
+            <h1 class="text-red-800 text-4xl font-bold mb-2">USB Mouse Pcap Visualizer</h1>
+        </header>
+
+        <div class="absolute top-0 right-0 p-6 flex items-center">
+            <!-- GitHub and download links -->
+            <a href="https://github.com/WangYihang/USB-Mouse-Pcap-Visualizer/blob/master/example/example.csv"
+            target="_blank"
+            class="text-xs bg-blue-800 hover:bg-blue-500 text-white font-bold py-1 px-2 rounded mr-2">
+            <i class="fa-brands fa-github"></i>
+        </a>
+        <a href="https://github.com/WangYihang/USB-Mouse-Pcap-Visualizer/blob/master/example/example.pcap"
+            target="_blank"
+            class="text-xs bg-blue-800 hover:bg-blue-500 text-white font-bold py-1 px-2 rounded mr-2">
+            PCAP
+        </a>
+        <a href="https://github.com/WangYihang/USB-Mouse-Pcap-Visualizer/blob/master/example/example.csv"
+            target="_blank" class="text-xs bg-blue-800 hover:bg-blue-500 text-white font-bold py-1 px-2 rounded">
+            CSV
+        </a>
+        </div>
+
+        <section class="mb-8">
+            <!-- Usage instructions -->
+            <h2 class="text-red-800 text-3xl font-bold mb-4">Usage</h2>
+            <ul class="list-inside bg-gray-200 p-4 rounded">
+                <li>git clone https://github.com/WangYihang/USB-Mouse-Pcap-Visualizer</li>
+                <li>cd USB-Mouse-Pcap-Visualizer</li>
+                <li>poetry install</li>
+                <li>poetry run python usb-mouse-pcap-visualizer.py -i example/example.pcap -o example/example.csv</li>
+            </ul>
+        </section>
+
+        <section class="mb-8">
+            <div class="flex items-center">
+                <!-- File upload and clear canvas buttons -->
+                <div class="relative overflow-hidden inline-block">
+                    <!-- First Button: Upload CSV File -->
+                    <button
+                        class="border border-gray-300 rounded px-4 py-2 cursor-pointer bg-violet-200 text-violet-700 hover:bg-violet-100 font-semibold text-sm">Upload
+                        CSV File</button>
+                    <input type="file" id="fileInput" accept=".csv"
+                        class="w-full h-full opacity-0 absolute top-0 left-0" style="font-size:100px;" />
+                </div>
+                <!-- Second Button: Clear Canvas -->
+                <button id="clearCanvasButton"
+                    class="ml-4 border border-gray-300 rounded px-4 py-2 cursor-pointer bg-red-500 text-white hover:bg-red-600 font-semibold text-sm">
+                    <i class="fa-solid fa-broom"></i> Clear Canvas
+                </button>
+            </div>
+        </section>
+
+        <!-- Arrow Key Instructions in a Callout Box -->
+        <section class="mb-8 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700">
+            <p>
+                Use the <i class="fas fa-arrow-left"></i> and <i class="fas fa-arrow-right"></i> arrow keys to navigate through the play area.
+                Press the <i class="fas fa-arrow-up"></i> and <i class="fas fa-arrow-down"></i> arrow keys to speed up and down.
+            </p>
+        </section>
+
+        <div id="canvasContainer" class="flex justify-center items-center my-6">
             <canvas id="mouseCanvas" class="shadow-xl"></canvas>
             <div id="progressContainer" class="w-full bg-gray-300 rounded-full h-2.5 mt-4">
                 <div id="progressBar" class="bg-blue-600 h-2.5 rounded-full"></div>
             </div>
         </div>
+
     </div>
     <script src="index.js"></script>
 </body>

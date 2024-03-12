@@ -68,7 +68,7 @@ function initCanvas(data) {
         }), { minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity });
 
         const screenWidth = window.innerWidth;
-        const canvasWidth = screenWidth * 0.8;
+        const canvasWidth = screenWidth * 0.6;
         const originalWidth = maxX - minX;
         const originalHeight = maxY - minY;
         const aspectRatio = originalHeight / originalWidth;

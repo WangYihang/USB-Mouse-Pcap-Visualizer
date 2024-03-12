@@ -2,6 +2,8 @@
 
 A forensic script that can help you to extract mouse movement / click data from usb traffic files.
 
+![Animation](https://github.com/WangYihang/USB-Mouse-Pcap-Visualizer/assets/16917636/1dd15ae6-ef58-416d-b5af-8cd8aaceeaaf)
+
 ## Installation
 
 ### Clone this repository

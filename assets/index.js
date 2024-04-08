@@ -1,3 +1,7 @@
+document.addEventListener('DOMContentLoaded', function () {
+    loadCSVFile();
+});
+
 document.getElementById('fileInput').addEventListener('change', function (event) {
     const file = event.target.files[0];
     if (!file) { return; }
@@ -9,6 +13,16 @@ document.getElementById('fileInput').addEventListener('change', function (event)
     };
     reader.readAsText(file);
 });
+
+function loadCSVFile() {
+    fetch('/example/XNUCA/data.csv')
+        .then(response => response.text())
+        .then(csvText => {
+            const data = parseCSVToObjects(csvText);
+            initCanvas(data);
+        })
+        .catch(error => console.error('Error loading CSV file:', error));
+}
 
 function parseCSVToObjects(csvText) {
     const lines = csvText.trim().split("\n");

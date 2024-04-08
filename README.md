@@ -47,7 +47,7 @@ options:
 ```
 
 ```bash
-poetry run python usb-mouse-pcap-visualizer.py -i example/example.pcap -o example/example.csv
+poetry run python usb-mouse-pcap-visualizer.py -i assets/example/XNUCA/data.pcap -o assets/example/XNUCA/data.csv
 ```
 
 The csv file can be visualized by `assets/index.html`, or try it [online](https://usb-mouse-pcap-visualizer.vercel.app/).
@@ -59,7 +59,7 @@ timestamp,x,y,left_button_holding,right_button_holding
 1478943238.899621,0,0,False,False
 ```
 
-![](example/example.png)
+![](assets/example/XNUCA/data.png)
 
 
 ## Demonstration Videos

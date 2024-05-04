@@ -15,7 +15,7 @@ loguru = "^0.7.2"
 plotly = "^5.19.0"
 pandas = "^2.2.1"
 pyautogui = "^0.9.54"
-tqdm = "^4.66.2"
+tqdm = "^4.66.3"
 
 
 [tool.poetry.group.dev.dependencies]

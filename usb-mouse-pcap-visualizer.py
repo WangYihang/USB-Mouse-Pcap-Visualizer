@@ -4,10 +4,12 @@ import enum
 import json
 import struct
 
-import loguru
 import pyshark
+import structlog
 import tqdm
 import typer
+
+logger = structlog.get_logger()
 
 
 class Opcode(enum.Enum):
@@ -122,18 +124,28 @@ app = typer.Typer()
 
 @app.command()
 def main(
-    input_file: str = typer.Option(..., '-i', '--input-file', help='Path to the input pcap file.'),
-    output_file: str = typer.Option(..., '-o', '--output-file', help='Path to the output csv file.'),
+    input_file: str = typer.Option(
+        ..., '-i', '--input-file',
+        help='Path to the input pcap file.',
+    ),
+    output_file: str = typer.Option(
+        ..., '-o', '--output-file',
+        help='Path to the output csv file.',
+    ),
 ):
-    loguru.logger.info(f"input_file={input_file}, output_file={output_file}")
+    logger.info(
+        'Starting processing', input_file=input_file,
+        output_file=output_file,
+    )
     mt = MouseTracer()
     for snapshot in snapshot_mouse(input_file):
         mt.add(snapshot)
-    loguru.logger.success(f"{len(mt.snapshots)} snapshots loaded")
+    logger.info('Snapshots loaded', count=len(mt.snapshots))
     mt.save(output_file)
-    loguru.logger.success(f"mouse snapshots saved to {output_file}")
-    loguru.logger.success(
-        'visualize the data by opening the assets/index.html file in your browser.',
+    logger.info('Mouse snapshots saved', output_file=output_file)
+    logger.info(
+        'Visualization ready',
+        message='visualize the data by opening the assets/index.html file in your browser.',
     )
 
 

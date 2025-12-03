@@ -13,5 +13,7 @@ dependencies = [
     "plotly>=6.5.0",
     "pyautogui>=0.9.54",
     "pyshark>=0.6",
+    "structlog",
     "tqdm>=4.67.1",
+    "typer>=0.20.0",
 ]

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import argparse
 import csv
 import enum
 import json
@@ -8,6 +7,7 @@ import struct
 import loguru
 import pyshark
 import tqdm
+import typer
 
 
 class Opcode(enum.Enum):
@@ -117,31 +117,25 @@ def snapshot_mouse(filepath: str):
         yield mouse_emulator.snapshot(timestamp)
 
 
-def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '-i', '--input-file', help='Path to the input pcap file.', required=True, type=str,
-    )
-    parser.add_argument(
-        '-o', '--output-file',
-        help='Path to the output csv file.', required=True, type=str,
-    )
-    return parser.parse_args()
+app = typer.Typer()
 
 
-def main():
-    args: argparse.Namespace = parse_args()
-    loguru.logger.info(args)
+@app.command()
+def main(
+    input_file: str = typer.Option(..., '-i', '--input-file', help='Path to the input pcap file.'),
+    output_file: str = typer.Option(..., '-o', '--output-file', help='Path to the output csv file.'),
+):
+    loguru.logger.info(f"input_file={input_file}, output_file={output_file}")
     mt = MouseTracer()
-    for snapshot in snapshot_mouse(args.input_file):
+    for snapshot in snapshot_mouse(input_file):
         mt.add(snapshot)
     loguru.logger.success(f"{len(mt.snapshots)} snapshots loaded")
-    mt.save(args.output_file)
-    loguru.logger.success(f"mouse snapshots saved to {args.output_file}")
+    mt.save(output_file)
+    loguru.logger.success(f"mouse snapshots saved to {output_file}")
     loguru.logger.success(
         'visualize the data by opening the assets/index.html file in your browser.',
     )
 
 
 if __name__ == '__main__':
-    main()
+    app()

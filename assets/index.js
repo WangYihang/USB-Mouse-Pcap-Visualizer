@@ -89,7 +89,7 @@ function initCanvas(data) {
         canvas.width = canvasWidth;
         canvas.height = canvasWidth * aspectRatio;
         canvasContainer.style.width = `${canvas.width}px`;
-    
+
         const scaleX = canvas.width / originalWidth * 0.8;
         const scaleY = canvas.height / originalHeight * 0.8;
 
@@ -143,7 +143,7 @@ function initCanvas(data) {
                 const snapshot = data[currentIndex];
                 const x = (snapshot.x - minX) * scaleX;
                 const y = canvas.height - (snapshot.y - minY) * scaleY;
-    
+
                 if (currentIndex > 0) {
                     customCursor.style.left = `${x - 5}px`;
                     customCursor.style.top = `${y - 5}px`;
@@ -222,10 +222,10 @@ function initCanvas(data) {
                 currentIndex = Math.max(currentIndex - frameStep, 0);
             } else if (event.keyCode === 39) {
                 currentIndex = Math.min(currentIndex + frameStep, totalFrames - 1);
-                   } else if (event.keyCode === 38) { 
-                playbackSpeed = Math.min(playbackSpeed + 1, 10); 
-            } else if (event.keyCode === 40) { 
-                playbackSpeed = Math.max(playbackSpeed - 1, 1); 
+                   } else if (event.keyCode === 38) {
+                playbackSpeed = Math.min(playbackSpeed + 1, 10);
+            } else if (event.keyCode === 40) {
+                playbackSpeed = Math.max(playbackSpeed - 1, 1);
             }
             if (isPaused) {
                 updateProgressBar(currentIndex);
@@ -234,9 +234,9 @@ function initCanvas(data) {
                 animate();
             }
         }
-    
+
         window.addEventListener('keydown', handleKeyboardEvent);
-    
+
 
         animationId = window.requestAnimationFrame(animate);
     }

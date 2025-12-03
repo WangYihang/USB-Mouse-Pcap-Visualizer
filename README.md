@@ -16,8 +16,10 @@ git clone https://github.com/WangYihang/USB-Mouse-Pcap-Visualizer.git
 
 ```bash
 cd USB-Mouse-Pcap-Visualizer
-pip install poetry
-poetry install
+# Install uv if you haven't already
+curl -LsSf https://astral.sh/uv/install.sh | sh
+# Install dependencies
+uv sync
 ```
 
 ### Install tshark
@@ -35,19 +37,18 @@ sudo apt install tshark
 ## Usage
 
 ```bash
-$ poetry run python usb-mouse-pcap-visualizer.py --help
-usage: usb-mouse-pcap-visualizer.py [-h] -i INPUT_FILE -o OUTPUT_FILE
+$ uv run python usb-mouse-pcap-visualizer.py --help
+Usage: usb-mouse-pcap-visualizer.py [OPTIONS]
 
-options:
-  -h, --help            show this help message and exit
-  -i INPUT_FILE, --input-file INPUT_FILE
-                        Path to the input pcap file.
-  -o OUTPUT_FILE, --output-file OUTPUT_FILE
-                        Path to the output csv file.
+Options:
+  -i, --input-file TEXT  Path to the input pcap file.  [required]
+  -o, --output-file TEXT
+                          Path to the output csv file.  [required]
+  --help                 Show this message and exit.
 ```
 
 ```bash
-poetry run python usb-mouse-pcap-visualizer.py -i assets/example/XNUCA/data.pcap -o assets/example/XNUCA/data.csv
+uv run python usb-mouse-pcap-visualizer.py -i assets/example/XNUCA/data.pcap -o assets/example/XNUCA/data.csv
 ```
 
 The csv file can be visualized by `assets/index.html`, or try it [online](https://usb-mouse-pcap-visualizer.vercel.app/).
